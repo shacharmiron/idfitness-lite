@@ -2,9 +2,9 @@
     "env": "development",
     "dbConfig": {
         "host": "localhost",
-        "user": "root",
-        "password": "password",
-        "database": "typeorm"
+        "user": "postgres",
+        "password": "masada",
+        "database": "postgres"
     },
     "secretKey": "secretKey",
     "log": {
