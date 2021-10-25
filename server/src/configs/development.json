@@ -2,9 +2,9 @@
     "env": "development",
     "dbConfig": {
         "host": "localhost",
-        "user": "root",
+        "user": "postgres",
         "password": "password",
-        "database": "typeorm"
+        "database": "postgres"
     },
     "secretKey": "secretKey",
     "log": {

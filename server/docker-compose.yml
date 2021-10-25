@@ -33,9 +33,9 @@ services:
     image: bitnami/postgresql:11-debian-9
     container_name: pg
     environment:
-      POSTGRESQL_USERNAME: root
+      POSTGRESQL_USERNAME: postgres
       POSTGRESQL_PASSWORD: password
-      POSTGRESQL_DATABASE: typeorm
+      POSTGRESQL_DATABASE: postgres
     ports:
       - '5432:5432'
     networks:
