@@ -60,9 +60,16 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             colorScheme: const ColorScheme.light(
               primary: Color.fromRGBO(50, 80, 46, 1),
-              secondary: Color.fromRGBO(254, 254, 254, 1),
+              secondary: Color.fromRGBO(236, 231, 180, 1),
             ),
+            textTheme: ThemeData.light().textTheme.copyWith(
+                  bodyText1:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
+                  bodyText2:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                ),
           ),
+
           darkTheme: ThemeData.dark(),
           themeMode: settingsController.themeMode,
 
@@ -77,12 +84,10 @@ class MyApp extends StatelessWidget {
                     return SettingsView(controller: settingsController);
                   case SampleItemDetailsView.routeName:
                     return const SampleItemDetailsView();
-                  case LoginScreen.routeName:
-                    return const LoginScreen();
                   case SampleItemListView.routeName:
-                    return const LoginScreen();
+                  case LoginScreen.routeName:
                   default:
-                    return const LoginScreen();
+                    return LoginScreen();
                 }
               },
             );
