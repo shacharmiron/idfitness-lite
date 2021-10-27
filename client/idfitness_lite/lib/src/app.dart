@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'login_screen/login_screen.dart';
-import 'home_screen/home_screen.dart';
-import 'sample_feature/sample_item_details_view.dart';
-import 'sample_feature/sample_item_list_view.dart';
-import 'settings/settings_controller.dart';
-import 'settings/settings_view.dart';
+import 'screens/login_screen.dart';
+import 'screens/home_screen.dart';
+import 'auto_things/sample_feature/sample_item_details_view.dart';
+import 'auto_things/sample_feature/sample_item_list_view.dart';
+import 'auto_things/settings/settings_controller.dart';
+import 'auto_things/settings/settings_view.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
