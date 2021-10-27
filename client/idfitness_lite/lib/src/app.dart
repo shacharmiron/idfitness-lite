@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'login_screen/login_screen.dart';
+import 'home_screen/home_screen.dart';
 import 'sample_feature/sample_item_details_view.dart';
 import 'sample_feature/sample_item_list_view.dart';
 import 'settings/settings_controller.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
           ],
           supportedLocales: const [
             Locale('en', ''), // English, no country code
+            Locale('he', 'IL'), // Israeli Hebrew
           ],
 
           // Use AppLocalizations to configure the correct application title
@@ -84,6 +86,8 @@ class MyApp extends StatelessWidget {
                     return SettingsView(controller: settingsController);
                   case SampleItemDetailsView.routeName:
                     return const SampleItemDetailsView();
+                  case HomeScreen.routeName:
+                    return HomeScreen();
                   case SampleItemListView.routeName:
                   case LoginScreen.routeName:
                   default:

@@ -7,9 +7,11 @@ class LoginScreen extends StatelessWidget {
 
   final formKey = GlobalKey<FormState>();
 
-  void login() {
+  void login(BuildContext ctx) {
     formKey.currentState!.save();
 
+    // if authentication returns ok:
+    Navigator.of(ctx).pushNamed(HomeScreen.routeName);
   }
 
   @override
@@ -46,6 +48,7 @@ class LoginScreen extends StatelessWidget {
                   height: 30,
                   child: TextFormField(
                     onSaved: (username) {
+                      print(username);
                     },
                     textDirection: TextDirection.rtl,
                     textInputAction: TextInputAction.next,
@@ -82,14 +85,14 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    onFieldSubmitted: (_) => login(),
+                    onFieldSubmitted: (_) => login(context),
                   ),
                 ),
               ],
             ),
           ),
           ElevatedButton(
-            onPressed: () => login(),
+            onPressed: () => login(context),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Text(
