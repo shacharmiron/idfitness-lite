@@ -16,12 +16,13 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreenState extends State<TabsScreen> {
-  late List<Widget> _screens = [
+  late final List<Widget> _screens = [
     HomeScreen(widget.user),
-    LoginScreen(() {}),
+    HomeScreen(widget.user),
     HomeScreen(widget.user)
   ];
-  int _selectedScreenIndex = 0;
+
+  int _selectedScreenIndex = 2;
 
   void _selectScreen(int index) {
     setState(() {
