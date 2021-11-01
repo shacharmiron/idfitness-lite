@@ -3,6 +3,7 @@ import config from 'config';
 import jwt from 'jsonwebtoken';
 import { getRepository } from 'typeorm';
 import { CreateUserDto } from '@dtos/users.dto';
+import { CreateLoginDto } from '@dtos/login.dto';
 import { UserEntity } from '@entity/users.entity';
 import { HttpException } from '@exceptions/HttpException';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
@@ -16,20 +17,20 @@ class AuthService {
     if (isEmpty(userData)) throw new HttpException(400, "You're not userData");
 
     const userRepository = getRepository(this.users);
-    const findUser: User = await userRepository.findOne({ where: { email: userData.email } });
-    if (findUser) throw new HttpException(409, `You're email ${userData.email} already exists`);
+    const findUser: User = await userRepository.findOne({ where: { username: userData.username } });
+    if (findUser) throw new HttpException(409, `You're username ${userData.username} already exists`);
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     const createUserData: User = await userRepository.save({ ...userData, password: hashedPassword });
     return createUserData;
   }
 
-  public async login(userData: CreateUserDto): Promise<{ cookie: string; findUser: User }> {
+  public async login(userData: CreateLoginDto): Promise<{ cookie: string; findUser: User }> {
     if (isEmpty(userData)) throw new HttpException(400, "You're not userData");
 
     const userRepository = getRepository(this.users);
-    const findUser: User = await userRepository.findOne({ where: { email: userData.email } });
-    if (!findUser) throw new HttpException(409, `You're email ${userData.email} not found`);
+    const findUser: User = await userRepository.findOne({ where: { username: userData.username } });
+    if (!findUser) throw new HttpException(409, `You're username ${userData.username} not found`);
 
     const isPasswordMatching: boolean = await bcrypt.compare(userData.password, findUser.password);
     if (!isPasswordMatching) throw new HttpException(409, "You're password not matching");
@@ -44,7 +45,7 @@ class AuthService {
     if (isEmpty(userData)) throw new HttpException(400, "You're not userData");
 
     const userRepository = getRepository(this.users);
-    const findUser: User = await userRepository.findOne({ where: { email: userData.email, password: userData.password } });
+    const findUser: User = await userRepository.findOne({ where: { username: userData.username, password: userData.password } });
     if (!findUser) throw new HttpException(409, "You're not user");
 
     return findUser;
