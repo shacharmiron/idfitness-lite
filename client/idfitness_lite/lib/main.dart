@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'entities/user.dart';
 import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/tabs_screen.dart';
 
 void main() async {
   runApp(MyApp());
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
           salt: data['salt'],
         );
 
-        Navigator.of(ctx).pushNamed(HomeScreen.routeName);
+        Navigator.of(ctx).pushNamed(TabsScreen.routeName);
       }
     });
   }
@@ -87,6 +88,7 @@ class MyApp extends StatelessWidget {
       routes: {
         HomeScreen.routeName: (ctx) => HomeScreen(user),
         LoginScreen.routeName: (ctx) => LoginScreen(login),
+        TabsScreen.routeName: (ctx) => TabsScreen(user),
       },
     );
   }
