@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../entities/user.dart';
+import '../widgets/last_events.dart';
 
 class HomeScreen extends StatelessWidget {
   static const routeName = '/home';
@@ -49,6 +50,7 @@ class HomeScreen extends StatelessWidget {
         titleTextStyle:
             TextStyle(color: Theme.of(context).colorScheme.secondary),
       ),
+      body: LastEvents(user),
     );
   }
 }
