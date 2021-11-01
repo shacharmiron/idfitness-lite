@@ -1,18 +1,23 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-
-import 'home_screen.dart';
 
 // All commented code is for signing up...
 class LoginScreen extends StatelessWidget {
   static const routeName = '/login';
 
-  final formKey = GlobalKey<FormState>();
+  final Function loginFunc;
 
+  LoginScreen(this.loginFunc);
+
+  final formKey = GlobalKey<FormState>();
   String username = "";
   String password = "";
+
+  void submit(BuildContext ctx) {
+    // Save form inputs
+    formKey.currentState!.save();
+
+    loginFunc(ctx, username, password);
+  }
 
   // String roleName = "";
   //
@@ -36,25 +41,6 @@ class LoginScreen extends StatelessWidget {
   //     });
   //   });
   // }
-
-  Future<void> login(BuildContext ctx) async {
-    // Save form inputs
-    formKey.currentState!.save();
-
-    // Authenticate the user
-    http.post(
-      Uri.parse('http://10.0.2.2:3000/login'),
-      body: {
-        "username": username,
-        "password": password,
-      },
-    ).then((response) {
-      // if authentication returns ok (200) go to home screen
-      if (response.statusCode == 200) {
-        Navigator.of(ctx).pushNamed(HomeScreen.routeName);
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +114,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    onFieldSubmitted: (_) => login(context),
+                    onFieldSubmitted: (_) => submit(context),
                   ),
                 ),
                 // Padding(
@@ -165,7 +151,7 @@ class LoginScreen extends StatelessWidget {
           // Column(
           //   children: [
           ElevatedButton(
-            onPressed: () => login(context),
+            onPressed: () => submit(context),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Text(

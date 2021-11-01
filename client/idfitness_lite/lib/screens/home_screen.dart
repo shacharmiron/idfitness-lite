@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../entities/user.dart';
+
 class HomeScreen extends StatelessWidget {
   static const routeName = '/home';
+
+  final User user;
+
+  HomeScreen(this.user);
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +40,8 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             Text(
-              'hello name name',
-              style: TextStyle(fontSize: 24),
+              '${user.username}שלום ',
+              style: const TextStyle(fontSize: 24),
             ),
           ],
         ),
