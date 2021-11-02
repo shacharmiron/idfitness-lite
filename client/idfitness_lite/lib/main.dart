@@ -1,16 +1,43 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:http/http.dart' as http;
 
-import 'src/screens/login_screen.dart';
-import 'src/screens/home_screen.dart';
+import 'entities/user.dart';
+import 'screens/login_screen.dart';
+import 'screens/home_screen.dart';
 
 void main() async {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  late User user;
+
+  Future<void> login(BuildContext ctx, String username, String password) async {
+    // Authenticate the user
+    http.post(
+      Uri.parse('http://10.0.2.2:3000/login'),
+      body: {
+        "username": username,
+        "password": password,
+      },
+    ).then((response) {
+      // if authentication returns ok go to home screen and update user
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body)['data'];
+        user = User(
+          username: data['username'],
+          roleId: data['role_id'],
+          salt: data['salt'],
+        );
+
+        Navigator.of(ctx).pushNamed(HomeScreen.routeName);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +82,11 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData.dark(),
       // themeMode: settingsController.themeMode,
 
-      home: LoginScreen(),
+      home: LoginScreen(login),
 
       routes: {
-        HomeScreen.routeName: (ctx) => HomeScreen(),
-        LoginScreen.routeName: (ctx) => LoginScreen(),
+        HomeScreen.routeName: (ctx) => HomeScreen(user),
+        LoginScreen.routeName: (ctx) => LoginScreen(login),
       },
     );
   }

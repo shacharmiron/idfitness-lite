@@ -1,26 +1,27 @@
 import { IsNotEmpty } from 'class-validator';
-import { Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne } from 'typeorm';
 import { User } from '@interfaces/users.interface';
+import { RoleEntity } from './roles.entity';
 
-@Entity()
-@Unique(['email'])
+@Entity({ name: 'users_table' })
 export class UserEntity implements User {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   @IsNotEmpty()
-  email: string;
+  username: string;
 
   @Column()
   @IsNotEmpty()
   password: string;
 
   @Column()
-  @CreateDateColumn()
-  createdAt: Date;
+  @IsNotEmpty()
+  salt: string;
 
   @Column()
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @ManyToOne(() => RoleEntity, role => role.users)
+  @JoinColumn({ name: 'role_id', referencedColumnName: 'id' })
+  role_id: number;
 }
