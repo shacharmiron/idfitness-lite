@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body)['data'];
         user = User(
+          id: data['id'],
           username: data['username'],
           roleId: data['role_id'],
           salt: data['salt'],
