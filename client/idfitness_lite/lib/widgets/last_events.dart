@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../entities/event.dart';
 import '../entities/user.dart';
+import 'add_event.dart';
 import 'event_item.dart';
 
 class LastEvents extends StatelessWidget {
@@ -21,6 +22,9 @@ class LastEvents extends StatelessWidget {
       createdBy: user,
     );
 
-    return EventItem(event);
+    return Row(children: [
+      EventItem(event),
+      AddEvent(user),
+    ]);
   }
 }

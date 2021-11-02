@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../entities/user.dart';
 import '../widgets/last_events.dart';
+import '../widgets/add_event_dialog.dart';
 
 class HomeScreen extends StatelessWidget {
   static const routeName = '/home';
@@ -16,6 +17,7 @@ class HomeScreen extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -50,7 +52,14 @@ class HomeScreen extends StatelessWidget {
         titleTextStyle:
             TextStyle(color: Theme.of(context).colorScheme.secondary),
       ),
-      body: LastEvents(user),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            LastEvents(user),
+            AddEventDialog(user),
+          ],
+        ),
+      ),
     );
   }
 }
