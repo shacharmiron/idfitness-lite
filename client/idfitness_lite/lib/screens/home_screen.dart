@@ -8,9 +8,6 @@ import '../widgets/last_events.dart';
 
 class HomeScreen extends StatelessWidget {
   static const routeName = '/home';
-  final Function addEventFunc;
-
-  HomeScreen(this.addEventFunc);
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +54,7 @@ class HomeScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            LastEvents(user, addEventFunc),
+            LastEvents(user),
           ],
         ),
       ),

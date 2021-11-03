@@ -130,9 +130,9 @@ class MyApp extends StatelessWidget {
         home: LoginScreen(login),
 
         routes: {
-          HomeScreen.routeName: (ctx) => HomeScreen(createEvent),
+          HomeScreen.routeName: (ctx) => HomeScreen(),
           LoginScreen.routeName: (ctx) => LoginScreen(login),
-          TabsScreen.routeName: (ctx) => TabsScreen(createEvent),
+          TabsScreen.routeName: (ctx) => TabsScreen(),
         },
       ),
     );

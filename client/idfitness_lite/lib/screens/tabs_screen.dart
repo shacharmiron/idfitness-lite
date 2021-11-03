@@ -4,20 +4,13 @@ import 'home_screen.dart';
 
 class TabsScreen extends StatefulWidget {
   static const routeName = '/tabs';
-  final Function addEventFunc;
-
-  TabsScreen(this.addEventFunc);
 
   @override
   _TabsScreenState createState() => _TabsScreenState();
 }
 
 class _TabsScreenState extends State<TabsScreen> {
-  late final List<Widget> _screens = [
-    HomeScreen(widget.addEventFunc),
-    HomeScreen(widget.addEventFunc),
-    HomeScreen(widget.addEventFunc)
-  ];
+  late final List<Widget> _screens = [HomeScreen(), HomeScreen(), HomeScreen()];
 
   int _selectedScreenIndex = 2;
 

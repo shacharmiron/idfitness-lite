@@ -4,14 +4,12 @@ import '../entities/event.dart';
 import '../entities/user.dart';
 import '../entities/event_type.dart';
 import '../entities/force.dart';
-import 'add_event.dart';
 import 'event_item.dart';
 
 class LastEvents extends StatelessWidget {
   final User user;
-  final Function addEventFunc;
 
-  LastEvents(this.user, this.addEventFunc);
+  LastEvents(this.user);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +25,6 @@ class LastEvents extends StatelessWidget {
 
     return Row(children: [
       EventItem(event),
-      AddEvent(addEventFunc),
     ]);
   }
 }
