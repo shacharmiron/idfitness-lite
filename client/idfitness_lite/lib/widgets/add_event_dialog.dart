@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
 
-import '../entities/user.dart';
+import '../entities/event.dart';
+import '../entities/event_type.dart';
+import '../entities/force.dart';
 
 class AddEventDialog extends StatefulWidget {
-  final User user;
+  final Function addEventFunc;
 
-  AddEventDialog(this.user);
+  AddEventDialog(this.addEventFunc);
 
   @override
   State<AddEventDialog> createState() => _AddEventDialogState();
@@ -34,15 +35,16 @@ class _AddEventDialogState extends State<AddEventDialog> {
   }
 
   void createEvent(BuildContext context) {
-    http.post(Uri.parse('http://10.0.2.2:3000/events'), body: {
-      'event_type_id': '3',
-      'force_id': '6',
-      'insertion_date': DateTime.now().toString(),
-      'event_date': selectedDate.toString(),
-      'comment': comment,
-      'is_deleted': 'false',
-      'created_by': widget.user.id.toString(),
-    });
+    Event event = Event(
+      eventType: EventType(id: 3, name: 'אימון'),
+      force: Force(id: 6, name: 'force1'),
+      insertionDate: DateTime.now(),
+      eventDate: selectedDate!,
+      comment: comment,
+      isDeleted: false,
+    );
+
+    widget.addEventFunc(context, event);
   }
 
   @override
@@ -93,7 +95,9 @@ class _AddEventDialogState extends State<AddEventDialog> {
               foregroundColor: MaterialStateProperty.all(Colors.black),
             ),
             child: const Icon(Icons.delete_outline),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ],
         content: Column(

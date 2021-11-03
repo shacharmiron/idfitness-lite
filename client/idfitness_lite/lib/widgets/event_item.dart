@@ -31,7 +31,7 @@ class EventItem extends StatelessWidget {
                 size: 64,
               ),
               Text(
-                event.eventType,
+                event.eventType.name,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
                   fontWeight: FontWeight.w600,

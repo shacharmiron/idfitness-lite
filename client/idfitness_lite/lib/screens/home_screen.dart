@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:idfitness_lite/providers/user_provider.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../entities/user.dart';
 import '../widgets/last_events.dart';
-import '../widgets/add_event_dialog.dart';
 
 class HomeScreen extends StatelessWidget {
   static const routeName = '/home';
+  final Function addEventFunc;
 
-  final User user;
-
-  HomeScreen(this.user);
+  HomeScreen(this.addEventFunc);
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+
+    User user = Provider.of<UserProvider>(context).user;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -55,8 +57,7 @@ class HomeScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            LastEvents(user),
-            AddEventDialog(user),
+            LastEvents(user, addEventFunc),
           ],
         ),
       ),

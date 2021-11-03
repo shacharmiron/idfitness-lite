@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:idfitness_lite/screens/login_screen.dart';
 
-import '../entities/user.dart';
 import 'home_screen.dart';
 
 class TabsScreen extends StatefulWidget {
   static const routeName = '/tabs';
+  final Function addEventFunc;
 
-  final User user;
-
-  TabsScreen(this.user);
+  TabsScreen(this.addEventFunc);
 
   @override
   _TabsScreenState createState() => _TabsScreenState();
@@ -17,9 +14,9 @@ class TabsScreen extends StatefulWidget {
 
 class _TabsScreenState extends State<TabsScreen> {
   late final List<Widget> _screens = [
-    HomeScreen(widget.user),
-    HomeScreen(widget.user),
-    HomeScreen(widget.user)
+    HomeScreen(widget.addEventFunc),
+    HomeScreen(widget.addEventFunc),
+    HomeScreen(widget.addEventFunc)
   ];
 
   int _selectedScreenIndex = 2;

@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
-import '../entities/user.dart';
 import 'add_event_dialog.dart';
 
 class AddEvent extends StatelessWidget {
-  final User user;
+  final Function addEventFunc;
 
-  const AddEvent(this.user);
+  const AddEvent(this.addEventFunc);
 
-  void addEvent(BuildContext ctx) {
-    print("try to open dialog...");
+  void openAddEventDialog(BuildContext ctx) {
     showDialog(
       context: ctx,
       builder: (_) {
-        return AddEventDialog(user);
+        return AddEventDialog(addEventFunc);
       },
     );
   }
@@ -28,7 +25,7 @@ class AddEvent extends StatelessWidget {
       child: InkWell(
         borderRadius: const BorderRadius.all(Radius.circular(25)),
         onTap: () {
-          addEvent(context);
+          openAddEventDialog(context);
         },
         child: Container(
           width: 130,

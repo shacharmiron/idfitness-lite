@@ -2,21 +2,24 @@ import 'package:flutter/material.dart';
 
 import '../entities/event.dart';
 import '../entities/user.dart';
+import '../entities/event_type.dart';
+import '../entities/force.dart';
 import 'add_event.dart';
 import 'event_item.dart';
 
 class LastEvents extends StatelessWidget {
   final User user;
+  final Function addEventFunc;
 
-  LastEvents(this.user);
+  LastEvents(this.user, this.addEventFunc);
 
   @override
   Widget build(BuildContext context) {
     Event event = Event(
-      eventType: 'אימון',
-      force: 'force1',
-      insertionDate: DateTime.now().subtract(Duration(days: 1)),
-      eventDate: DateTime.now().add(Duration(days: 1)),
+      eventType: EventType(id: 3, name: 'אימון'),
+      force: Force(id: 6, name: 'force1'),
+      insertionDate: DateTime.now().subtract(const Duration(days: 1)),
+      eventDate: DateTime.now().add(const Duration(days: 1)),
       comment: 'this is my comment',
       isDeleted: false,
       createdBy: user,
@@ -24,7 +27,7 @@ class LastEvents extends StatelessWidget {
 
     return Row(children: [
       EventItem(event),
-      AddEvent(user),
+      AddEvent(addEventFunc),
     ]);
   }
 }
