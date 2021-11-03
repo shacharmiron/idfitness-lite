@@ -8,7 +8,10 @@ export class CreateEventDto {
   public force_id: number;
 
   @IsString()
-  public eventDate: Date;
+  public insertion_date: Date;
+
+  @IsString()
+  public event_date: Date;
 
   @IsString()
   public comment: string;

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:idfitness_lite/providers/user_provider.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../entities/user.dart';
 import '../widgets/last_events.dart';
@@ -7,15 +9,14 @@ import '../widgets/last_events.dart';
 class HomeScreen extends StatelessWidget {
   static const routeName = '/home';
 
-  final User user;
-
-  HomeScreen(this.user);
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
 
+    User user = Provider.of<UserProvider>(context).user;
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -50,7 +51,13 @@ class HomeScreen extends StatelessWidget {
         titleTextStyle:
             TextStyle(color: Theme.of(context).colorScheme.secondary),
       ),
-      body: LastEvents(user),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            LastEvents(user),
+          ],
+        ),
+      ),
     );
   }
 }

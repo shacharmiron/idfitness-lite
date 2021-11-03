@@ -1,13 +1,15 @@
+import 'event_type.dart';
+import 'force.dart';
 import 'user.dart';
 
 class Event {
-  String eventType;
-  String force;
+  EventType eventType;
+  Force force;
   DateTime insertionDate;
   DateTime eventDate;
   String comment;
   bool isDeleted;
-  User createdBy;
+  User? createdBy;
 
   Event({
     required this.eventType,
@@ -16,6 +18,6 @@ class Event {
     required this.eventDate,
     required this.comment,
     required this.isDeleted,
-    required this.createdBy,
+    this.createdBy,
   });
 }

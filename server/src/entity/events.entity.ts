@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Event } from '@/interfaces/events.interface';
 import { IsNotEmpty } from 'class-validator';
 import { EventTypeEntity } from './event_types.entity';
@@ -11,9 +11,11 @@ export class EventEntity implements Event {
   id: number;
 
   @ManyToOne(() => EventTypeEntity, event_type => event_type.id)
+  @JoinColumn({ name:'event_type_id', referencedColumnName: 'id'})
   event_type_id: number;
 
   @ManyToOne(() => ForceEntity, force => force.id)
+  @JoinColumn({ name:'force_id', referencedColumnName: 'id'})
   force_id: number;
 
   @Column()
@@ -33,5 +35,6 @@ export class EventEntity implements Event {
   is_deleted: boolean;
 
   @ManyToOne(() => UserEntity, created_by => created_by.id)
+  @JoinColumn({ name: 'created_by', referencedColumnName: 'id'})
   created_by: number;
 }
