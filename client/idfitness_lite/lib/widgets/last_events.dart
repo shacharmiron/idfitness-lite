@@ -43,6 +43,7 @@ class LastEvents extends StatelessWidget {
         height: 150,
         child: ListView.builder(
           shrinkWrap: true,
+          reverse: true,
           scrollDirection: Axis.horizontal,
           itemCount: min(amountOfLastEvents, events.length),
           itemBuilder: (ctx, index) {
