@@ -13,6 +13,7 @@ class ForcesRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, this.forcesController.getForces);
+    this.router.get(`${this.path}/:id(\\d+)`, this.forcesController.getForceById);
   }
 }
 

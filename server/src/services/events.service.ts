@@ -10,7 +10,7 @@ class EventService {
 
   public async findAllEvents(): Promise<Event[]> {
     const eventRepository = getRepository(this.events);
-    const events: Event[] = await eventRepository.find();
+    const events: Event[] = await eventRepository.find({ order: { event_date: 'ASC' } });
 
     return events;
   }

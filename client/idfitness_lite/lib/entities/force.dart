@@ -1,11 +1,11 @@
 class Force {
   final int id;
   final String name;
-  final Force? parent;
+  final int? parentId;
 
   Force({
     required this.id,
     required this.name,
-    this.parent,
+    this.parentId,
   });
 }

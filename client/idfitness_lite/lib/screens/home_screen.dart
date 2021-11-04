@@ -1,13 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:idfitness_lite/providers/user_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../entities/user.dart';
 import '../widgets/last_events.dart';
+import '../providers/events_provider.dart';
+import '../providers/user_provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    Future.delayed(Duration.zero).then((_) async {
+      await Provider.of<EventsProvider>(context, listen: false)
+          .fetchAndSetEvents();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +69,7 @@ class HomeScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            LastEvents(user),
+            LastEvents(),
           ],
         ),
       ),

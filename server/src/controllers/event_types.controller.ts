@@ -14,6 +14,17 @@ class EventTypesController {
       next(error);
     }
   };
+
+  public getEventTypeById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const eventTypeId = Number(req.params.id);
+      const findOneEventTypeData: EventType = await this.eventTypesService.findEventTypeById(eventTypeId);
+
+      res.status(200).json({ data: findOneEventTypeData, message: 'findOne' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default EventTypesController;

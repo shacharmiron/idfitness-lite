@@ -14,6 +14,17 @@ class ForcesController {
       next(error);
     }
   };
+
+  public getForceById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const forceId = Number(req.params.id);
+      const findOneForceData: Force = await this.forcesService.findForceById(forceId);
+
+      res.status(200).json({ data: findOneForceData, message: 'findOne' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default ForcesController;

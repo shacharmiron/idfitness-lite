@@ -10,46 +10,48 @@ class EventItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(25)),
-      ),
-      child: InkWell(
-        borderRadius: const BorderRadius.all(Radius.circular(25)),
-        onTap: () {
-          print("event info");
-        },
-        child: Container(
-          width: 130,
-          height: 130,
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Icon(
-                Icons.directions_run,
-                color: Theme.of(context).colorScheme.primary,
-                size: 64,
-              ),
-              Text(
-                event.eventType.name,
-                style: TextStyle(
+    return Wrap(children: [
+      Card(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(25)),
+        ),
+        child: InkWell(
+          borderRadius: const BorderRadius.all(Radius.circular(25)),
+          onTap: () {
+            print("event info");
+          },
+          child: Container(
+            width: 130,
+            height: 130,
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.directions_run,
                   color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
+                  size: 64,
                 ),
-              ),
-              Text(
-                DateFormat('dd.MM.yy').format(event.eventDate),
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
+                Text(
+                  event.eventType.name,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                  ),
                 ),
-              ),
-            ],
+                Text(
+                  DateFormat('dd.MM.yy').format(event.eventDate),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    );
+    ]);
   }
 }
