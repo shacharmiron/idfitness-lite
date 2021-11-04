@@ -30,7 +30,7 @@ class UserService {
     if (isEmpty(userData)) throw new HttpException(400, "You're not userData");
 
     const userRepository = getRepository(this.users);
-    const findUser: User = await userRepository.findOne({ where: { email: userData.username } });
+    const findUser: User = await userRepository.findOne({ where: { username: userData.username } });
     if (findUser) throw new HttpException(409, `You're username ${userData.username} already exists`);
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
