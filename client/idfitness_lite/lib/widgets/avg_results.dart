@@ -28,69 +28,88 @@ class AvgResults extends StatelessWidget {
         ),
         child: BarChart(
           BarChartData(
-            barTouchData: BarTouchData(
-              touchTooltipData: BarTouchTooltipData(
-                tooltipBgColor: Colors.transparent,
-                tooltipMargin: 0,
-                tooltipPadding: const EdgeInsets.all(0),
-                getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                  return BarTooltipItem(
-                    rod.y.round().toString(),
-                    const TextStyle(color: Colors.black),
-                  );
-                },
-              ),
-            ),
+            barTouchData: buildBarTouchData(),
             gridData: FlGridData(show: false),
             maxY: 100,
-            rangeAnnotations: RangeAnnotations(horizontalRangeAnnotations: [
-              HorizontalRangeAnnotation(
-                y1: passingResult + 1,
-                y2: passingResult - 1,
-                color: const Color.fromRGBO(209, 172, 39, 1),
-              ),
-            ]),
-            borderData: FlBorderData(
-              border: const Border(
-                bottom: BorderSide(color: Colors.black, width: 2),
-                left: BorderSide(color: Colors.black, width: 2),
-              ),
-            ),
-            titlesData: FlTitlesData(
-              rightTitles: SideTitles(showTitles: false),
-              leftTitles: SideTitles(showTitles: false),
-              topTitles: SideTitles(showTitles: false),
-              bottomTitles: SideTitles(
-                showTitles: true,
-                getTextStyles: (ctx, index) {
-                  return TextStyle(
-                    color: Theme.of(ctx).colorScheme.primary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                  );
-                },
-                getTitles: (index) {
-                  return '${textData[index.toInt()]}\n10.5.21';
-                },
-              ),
-            ),
-            barGroups: List.generate(
-              data.length,
-              (index) => BarChartGroupData(
-                x: index,
-                barRods: [
-                  BarChartRodData(
-                    y: data[index],
-                    width: 5,
-                    colors: [Theme.of(context).colorScheme.primary],
-                  ),
-                ],
-                showingTooltipIndicators: [0],
-              ),
-            ),
+            rangeAnnotations: buildPassingLine(passingResult),
+            borderData: buildBorder(),
+            titlesData: buildTitlesData(textData),
+            barGroups: buildBars(context, data),
           ),
         ),
       ),
     ]);
+  }
+
+  BarTouchData buildBarTouchData() {
+    return BarTouchData(
+      touchTooltipData: BarTouchTooltipData(
+        tooltipBgColor: Colors.transparent,
+        tooltipMargin: 0,
+        tooltipPadding: const EdgeInsets.all(0),
+        getTooltipItem: (group, groupIndex, rod, rodIndex) {
+          return BarTooltipItem(
+            rod.y.round().toString(),
+            const TextStyle(color: Colors.black),
+          );
+        },
+      ),
+    );
+  }
+
+  RangeAnnotations buildPassingLine(int passingResult) {
+    return RangeAnnotations(horizontalRangeAnnotations: [
+      HorizontalRangeAnnotation(
+        y1: passingResult + 1,
+        y2: passingResult - 1,
+        color: const Color.fromRGBO(209, 172, 39, 1),
+      ),
+    ]);
+  }
+
+  FlBorderData buildBorder() {
+    return FlBorderData(
+      border: const Border(
+        bottom: BorderSide(color: Colors.black, width: 2),
+        left: BorderSide(color: Colors.black, width: 2),
+      ),
+    );
+  }
+
+  FlTitlesData buildTitlesData(List<String> textData) {
+    return FlTitlesData(
+      rightTitles: SideTitles(showTitles: false),
+      leftTitles: SideTitles(showTitles: false),
+      topTitles: SideTitles(showTitles: false),
+      bottomTitles: SideTitles(
+        showTitles: true,
+        getTextStyles: (ctx, index) {
+          return TextStyle(
+            color: Theme.of(ctx).colorScheme.primary,
+            fontSize: 12,
+          );
+        },
+        getTitles: (index) {
+          return '${textData[index.toInt()]}\n10.5.21';
+        },
+      ),
+    );
+  }
+
+  List<BarChartGroupData> buildBars(BuildContext context, List<double> data) {
+    return List.generate(
+      data.length,
+      (index) => BarChartGroupData(
+        x: index,
+        barRods: [
+          BarChartRodData(
+            y: data[index],
+            width: 5,
+            colors: [Theme.of(context).colorScheme.primary],
+          ),
+        ],
+        showingTooltipIndicators: [0],
+      ),
+    );
   }
 }
