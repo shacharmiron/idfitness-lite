@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../entities/user.dart';
 import '../widgets/last_events.dart';
+import '../widgets/avg_results.dart';
 import '../providers/events_provider.dart';
 import '../providers/user_provider.dart';
 
@@ -70,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             LastEvents(),
+            AvgResults(),
           ],
         ),
       ),
