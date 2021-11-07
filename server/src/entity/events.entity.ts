@@ -4,6 +4,7 @@ import { IsNotEmpty } from 'class-validator';
 import { EventTypeEntity } from './event_types.entity';
 import { ForceEntity } from './forces.entity';
 import { UserEntity } from './users.entity';
+import { ResultEntity } from './results.entity';
 
 @Entity({ name: 'events_table' })
 export class EventEntity implements Event {
@@ -40,4 +41,7 @@ export class EventEntity implements Event {
   @ManyToOne(() => UserEntity, created_by => created_by.id)
   @JoinColumn({ name: 'created_by', referencedColumnName: 'id' })
   created_by: number;
+
+  @OneToMany(() => ResultEntity, result => result.event_id)
+  results: ResultEntity[];
 }

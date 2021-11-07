@@ -10,17 +10,21 @@ import RolesRoute from './routes/roles.route';
 import ForcesRoute from '@routes/forces.route';
 import EventsRoute from '@routes/events.route';
 import EventTypesRoute from '@routes/event_types.route';
+import ResultsRoute from './routes/results.route';
+import SoldiersRoute from './routes/soldiers.route';
 
 validateEnv();
 
 const app = new App([
-    new IndexRoute(), 
-    new UsersRoute(), 
-    new AuthRoute(), 
-    new RolesRoute(), 
-    new ForcesRoute(), 
-    new EventsRoute(), 
-    new EventTypesRoute(),
+  new IndexRoute(),
+  new UsersRoute(),
+  new AuthRoute(),
+  new RolesRoute(),
+  new ForcesRoute(),
+  new EventsRoute(),
+  new EventTypesRoute(),
+  new ResultsRoute(),
+  new SoldiersRoute(),
 ]);
 
 app.listen();
