@@ -14,6 +14,7 @@ class EventsRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}`, this.eventsController.getEvents);
     this.router.post(`${this.path}`, this.eventsController.createEvent);
+    this.router.get(`${this.path}/:id(\\d+)`, this.eventsController.getEventById);
   }
 }
 

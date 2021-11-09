@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
+import '../http_requests.dart' as http;
+
 class AvgResults extends StatelessWidget {
   const AvgResults({Key? key}) : super(key: key);
 
@@ -18,6 +20,13 @@ class AvgResults extends StatelessWidget {
 
     return Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
       const Text("ציונים מוצעים"),
+      ElevatedButton(
+          child: Text("get results"),
+          onPressed: () {
+            http.findResultsByEvent(1).then((results) {
+              print('in the avg results: $results');
+            });
+          }),
       Container(
         padding: const EdgeInsets.all(20),
         margin: const EdgeInsets.all(20),

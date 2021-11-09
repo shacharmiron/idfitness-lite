@@ -13,6 +13,7 @@ class SoldiersRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, this.soldiersController.getSoldiers);
+    this.router.get(`${this.path}/:id(\\d+)`, this.soldiersController.getSoldierById);
   }
 }
 

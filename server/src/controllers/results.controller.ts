@@ -14,6 +14,20 @@ class ResultsController {
       next(error);
     }
   };
+
+  public getResultsByEvent = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      console.log(`event_id: ${req.params.event_id}`);
+      const eventId = Number(req.params.event_id);
+      const findResultsData: Result[] = await this.resultService.findResultsByEvent(eventId);
+      console.log(`results length: (${findResultsData.length})`);
+      console.log(`results: (${findResultsData})`);
+
+      res.status(200).json({ data: findResultsData, message: 'findByEvent' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default ResultsController;

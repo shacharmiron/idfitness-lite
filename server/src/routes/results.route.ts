@@ -13,6 +13,7 @@ class ResultsRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, this.resultsController.getResults);
+    this.router.get(`${this.path}/event/:event_id(\\d+)`, this.resultsController.getResultsByEvent);
   }
 }
 

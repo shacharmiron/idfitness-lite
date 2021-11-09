@@ -21,15 +21,17 @@ class EventsProvider with ChangeNotifier {
 
   Future<void> fetchAndSetEvents() async {
     List<Event> loadedEvents = [];
-    http.getAllEvents().then((res) {
+    http.getAllEvents().then((res) async {
       var data = jsonDecode(res.body)['data'];
       if (data == null) {
         return;
       }
-      data.forEach((event) {
-        http.findForceById(event['force_id']).then((force) {
-          http.findEventTypeById(event['event_type_id']).then((eventType) {
-            http.findUserById(event['created_by']).then((user) {
+      for (var event in data) {
+        await http.findForceById(event['force_id']).then((force) async {
+          await http
+              .findEventTypeById(event['event_type_id'])
+              .then((eventType) async {
+            await http.findUserById(event['created_by']).then((user) {
               loadedEvents.add(Event(
                 createdBy: user,
                 force: force,
@@ -40,15 +42,13 @@ class EventsProvider with ChangeNotifier {
                 comment: event['comment'],
                 id: event['id'] as int,
               ));
-
-              loadedEvents
-                  .sort((a, b) => a.eventDate.isAfter(b.eventDate) ? 1 : -1);
-              _events = loadedEvents.toList();
-              notifyListeners();
             });
           });
         });
-      });
+      }
+      loadedEvents.sort((a, b) => a.eventDate.isAfter(b.eventDate) ? 1 : -1);
+      _events = loadedEvents.toList();
+      notifyListeners();
     });
   }
 
