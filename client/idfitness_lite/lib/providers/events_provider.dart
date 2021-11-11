@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +10,7 @@ import 'user_provider.dart';
 
 class EventsProvider with ChangeNotifier {
   List<Event> _events = [];
+  int lastEventsAmount = 5;
 
   void initEvents(List<Event> events) {
     _events = events;
@@ -19,17 +21,23 @@ class EventsProvider with ChangeNotifier {
     return [..._events];
   }
 
+  List<Event> get lastEvents {
+    return [..._events].sublist(0, min(_events.length, lastEventsAmount));
+  }
+
   Future<void> fetchAndSetEvents() async {
     List<Event> loadedEvents = [];
-    http.getAllEvents().then((res) {
+    http.getAllEvents().then((res) async {
       var data = jsonDecode(res.body)['data'];
       if (data == null) {
         return;
       }
-      data.forEach((event) {
-        http.findForceById(event['force_id']).then((force) {
-          http.findEventTypeById(event['event_type_id']).then((eventType) {
-            http.findUserById(event['created_by']).then((user) {
+      for (var event in data) {
+        await http.findForceById(event['force_id']).then((force) async {
+          await http
+              .findEventTypeById(event['event_type_id'])
+              .then((eventType) async {
+            await http.findUserById(event['created_by']).then((user) {
               loadedEvents.add(Event(
                 createdBy: user,
                 force: force,
@@ -40,15 +48,13 @@ class EventsProvider with ChangeNotifier {
                 comment: event['comment'],
                 id: event['id'] as int,
               ));
-
-              loadedEvents
-                  .sort((a, b) => a.eventDate.isAfter(b.eventDate) ? 1 : -1);
-              _events = loadedEvents.toList();
-              notifyListeners();
             });
           });
         });
-      });
+      }
+      loadedEvents.sort((a, b) => a.eventDate.isAfter(b.eventDate) ? -1 : 1);
+      _events = loadedEvents.toList();
+      notifyListeners();
     });
   }
 

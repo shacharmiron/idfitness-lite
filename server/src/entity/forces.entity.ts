@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { Force } from '@/interfaces/forces.interface';
 import { IsNotEmpty } from 'class-validator';
+import { SoldierEntity } from './soldiers.entity';
 
 @Entity({ name: 'forces_table' })
 @Unique(['id'])
@@ -19,4 +20,7 @@ export class ForceEntity implements Force {
 
   @OneToMany(() => ForceEntity, child => child.parent_id)
   children: ForceEntity[];
+
+  @OneToMany(() => SoldierEntity, soldier => soldier.force_id)
+  soldiers: SoldierEntity[];
 }

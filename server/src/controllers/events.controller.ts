@@ -26,6 +26,17 @@ class EventsController {
       next(error);
     }
   };
+
+  public getEventById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const eventId = Number(req.params.id);
+      const findOneEventData: Event = await this.eventsService.findEventById(eventId);
+
+      res.status(200).json({ data: findOneEventData, message: 'findOne' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default EventsController;

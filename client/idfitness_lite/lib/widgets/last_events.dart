@@ -10,8 +10,7 @@ import 'event_item.dart';
 class LastEvents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    const int amountOfLastEvents = 5;
-    List<Event> events = Provider.of<EventsProvider>(context).events;
+    List<Event> events = Provider.of<EventsProvider>(context).lastEvents;
 
     return Column(children: [
       Row(
@@ -45,7 +44,7 @@ class LastEvents extends StatelessWidget {
           shrinkWrap: true,
           reverse: true,
           scrollDirection: Axis.horizontal,
-          itemCount: min(amountOfLastEvents, events.length),
+          itemCount: events.length,
           itemBuilder: (ctx, index) {
             return EventItem(events[index]);
           },

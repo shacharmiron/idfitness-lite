@@ -36,6 +36,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
 
   void createEvent(BuildContext context) {
     Event event = Event(
+      id: 1,
       eventType: EventType(id: 3, name: 'אימון'),
       force: Force(id: 6, name: 'force1'),
       insertionDate: DateTime.now(),
