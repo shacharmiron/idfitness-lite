@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../entities/user.dart';
 import '../widgets/last_events.dart';
 import '../widgets/avg_results.dart';
+import '../widgets/leader_board.dart';
 import '../providers/events_provider.dart';
 import '../providers/user_provider.dart';
 
@@ -72,6 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             LastEvents(),
             AvgResults(),
+            LeaderBoard(),
           ],
         ),
       ),

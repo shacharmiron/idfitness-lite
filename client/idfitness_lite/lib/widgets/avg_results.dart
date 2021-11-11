@@ -47,7 +47,7 @@ class _AvgResultsState extends State<AvgResults> {
         height: 150,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(25),
         ),
         child: BarChart(
           BarChartData(
