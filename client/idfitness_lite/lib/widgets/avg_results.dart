@@ -33,7 +33,14 @@ class _AvgResultsState extends State<AvgResults> {
     }
 
     return Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-      const Text("ציונים מוצעים"),
+      const Text(
+        "ציונים מוצעים",
+        style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.w600,
+          fontSize: 16,
+        ),
+      ),
       Container(
         padding: const EdgeInsets.all(20),
         margin: const EdgeInsets.all(20),
