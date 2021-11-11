@@ -22,9 +22,33 @@ Future<http.Response> login(String username, String password) async {
   );
 }
 
-Future<http.Response> getAllEvents() async {
+Future<List<Event>> getAllEvents() async {
+  List<Event> loadedEvents = [];
   return http.get(Uri.parse('$baseUrl/events'),
-      headers: {'Content-Type': 'application/json'});
+      headers: {'Content-Type': 'application/json'}).then((res) async {
+    var data = jsonDecode(res.body)['data'];
+    for (var event in data) {
+      await findForceById(event['force_id']).then((force) async {
+        await findEventTypeById(event['event_type_id']).then((eventType) async {
+          await findUserById(event['created_by']).then((user) {
+            loadedEvents.add(Event(
+              createdBy: user,
+              force: force,
+              eventType: eventType,
+              eventDate: DateTime.parse(event['event_date']),
+              insertionDate: DateTime.parse(event['insertion_date']),
+              isDeleted: event['is_deleted'] as bool,
+              comment: event['comment'],
+              id: event['id'] as int,
+            ));
+          });
+        });
+      });
+    }
+
+    loadedEvents.sort((a, b) => a.eventDate.isAfter(b.eventDate) ? -1 : 1);
+    return loadedEvents;
+  });
 }
 
 Future<http.Response> addEvent(Event event) async {
@@ -125,20 +149,18 @@ Future<Soldier> findSoldierById(int soldierId) async {
   });
 }
 
-Future<List<Result>> findResultsByEvent(int eventId) async {
+Future<List<Result>> getAllResults() async {
   List<Result> loadedResults = [];
-  return http.get(Uri.parse('$baseUrl/results/event/$eventId'),
+  return http.get(Uri.parse('$baseUrl/results'),
       headers: {'Content-Type': 'application/json'}).then((res) async {
     var data = jsonDecode(res.body)['data'];
-
     for (var result in data) {
       await findEventById(result['event_id']).then((event) async {
         await findSoldierById(result['soldier_id']).then((soldier) {
           loadedResults.add(Result(
-            id: result['id'],
-            insertionDate: DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                .parse(result['insertion_date']),
-            result: result['result'],
+            id: result['id'] as int,
+            insertionDate: DateTime.parse(result['insertion_date']),
+            result: result['result'] as int,
             event: event,
             soldier: soldier,
           ));
@@ -146,5 +168,30 @@ Future<List<Result>> findResultsByEvent(int eventId) async {
       });
     }
     return loadedResults;
+  });
+}
+
+Future<List<Soldier>> getAllSoldiers() async {
+  List<Soldier> loadedSoldiers = [];
+  return http.get(Uri.parse('$baseUrl/soldiers'),
+      headers: {'Content-Type': 'application/json'}).then((res) async {
+    var data = jsonDecode(res.body)['data'];
+    for (var soldier in data) {
+      await findForceById(soldier['force_id']).then((force) async {
+        await findUserById(soldier['created_by']).then((user) {
+          loadedSoldiers.add(Soldier(
+            id: soldier['id'] as int,
+            firstName: soldier['first_name'],
+            lastName: soldier['last_name'],
+            dateOfBirth: DateTime.parse(soldier['date_of_birth']),
+            user: user,
+            force: force,
+            weight: soldier['weight'] as int,
+            height: soldier['height'] as int,
+          ));
+        });
+      });
+    }
+    return loadedSoldiers;
   });
 }

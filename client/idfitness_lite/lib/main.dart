@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'http_requests.dart' as http;
 import 'entities/event.dart';
 import 'providers/events_provider.dart';
+import 'providers/results_provider.dart';
 import 'providers/user_provider.dart';
 import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
@@ -59,6 +60,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => EventsProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => ResultsProvider(),
         ),
       ],
       child: MaterialApp(

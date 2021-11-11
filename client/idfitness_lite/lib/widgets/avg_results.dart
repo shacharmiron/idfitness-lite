@@ -1,35 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:idfitness_lite/entities/result.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
-import '../http_requests.dart' as http;
 import '../entities/event.dart';
-import '../providers/events_provider.dart';
 import '../entities/avg_results_bar.dart';
+import '../providers/events_provider.dart';
+import '../providers/results_provider.dart';
 
-class AvgResults extends StatefulWidget {
+class AvgResults extends StatelessWidget {
   bool firstTime = true;
-  List<AvgResultsBar> data = [];
 
-  @override
-  State<AvgResults> createState() => _AvgResultsState();
-}
-
-class _AvgResultsState extends State<AvgResults> {
   @override
   Widget build(BuildContext context) {
     const int passingResult = 60;
+    List<AvgResultsBar> data = [];
     List<Event> lastEvents = Provider.of<EventsProvider>(context).lastEvents;
-    if (widget.firstTime) {
-      getAVGs(lastEvents).then((data) {
-        if (data.isNotEmpty) {
-          widget.firstTime = false;
-        }
-        setState(() {
-          widget.data = data;
-        });
+    ResultsProvider results = Provider.of<ResultsProvider>(context);
+
+    for (var event in lastEvents) {
+      List<Result> eventResults = results.getResultsOfEvent(event.id);
+      int amount = eventResults.length;
+      int sum = eventResults.fold(0, (previousValue, result) {
+        return previousValue + result.result;
       });
+      double avg = amount == 0 ? 0.1 : sum / amount;
+
+      data.add(AvgResultsBar(
+        eventDate: event.eventDate,
+        eventName: event.eventType.name,
+        avgResult: avg,
+      ));
     }
 
     return Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
@@ -56,41 +58,12 @@ class _AvgResultsState extends State<AvgResults> {
             maxY: 100,
             rangeAnnotations: buildPassingLine(passingResult),
             borderData: buildBorder(),
-            titlesData: buildTitlesData(widget.data),
-            barGroups: buildBars(context, widget.data),
+            titlesData: buildTitlesData(data),
+            barGroups: buildBars(context, data),
           ),
         ),
       ),
     ]);
-  }
-
-  Future<List<AvgResultsBar>> getAVGs(List<Event> lastEvents) async {
-    double avg = 0;
-    List<AvgResultsBar> chartBars = [];
-    for (var event in lastEvents) {
-      avg = 0;
-      await http.findResultsByEvent(event.id).then((results) {
-        if (results.isEmpty) {
-          chartBars.add(AvgResultsBar(
-            avgResult: 0.1,
-            eventName: event.eventType.name,
-            eventDate: event.eventDate,
-          ));
-        } else {
-          double sum = results.fold(0, (previousValue, result) {
-            return previousValue + result.result + 0.0;
-          });
-
-          avg = sum / results.length + 0.0;
-          chartBars.add(AvgResultsBar(
-            avgResult: avg,
-            eventName: event.eventType.name,
-            eventDate: event.eventDate,
-          ));
-        }
-      });
-    }
-    return chartBars;
   }
 
   BarTouchData buildBarTouchData() {
