@@ -1,32 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 import '../http_requests.dart' as http;
+import '../entities/event.dart';
+import '../providers/events_provider.dart';
+import '../entities/avg_results_bar.dart';
 
-class AvgResults extends StatelessWidget {
-  const AvgResults({Key? key}) : super(key: key);
+class AvgResults extends StatefulWidget {
+  bool firstTime = true;
+  List<AvgResultsBar> data = [];
 
+  @override
+  State<AvgResults> createState() => _AvgResultsState();
+}
+
+class _AvgResultsState extends State<AvgResults> {
   @override
   Widget build(BuildContext context) {
     const int passingResult = 60;
-    List<double> data = [98, 70, 85.124, 40.1, 80.5];
-    List<String> textData = [
-      'אימון',
-      'מבחן',
-      'אימון2',
-      'כוח',
-      'ריצה',
-    ];
+    List<Event> lastEvents = Provider.of<EventsProvider>(context).lastEvents;
+    if (widget.firstTime) {
+      getAVGs(lastEvents).then((data) {
+        if (data.isNotEmpty) {
+          widget.firstTime = false;
+        }
+        setState(() {
+          widget.data = data;
+        });
+      });
+    }
 
     return Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
       const Text("ציונים מוצעים"),
-      ElevatedButton(
-          child: Text("get results"),
-          onPressed: () {
-            http.findResultsByEvent(1).then((results) {
-              print('in the avg results: $results');
-            });
-          }),
       Container(
         padding: const EdgeInsets.all(20),
         margin: const EdgeInsets.all(20),
@@ -42,12 +49,41 @@ class AvgResults extends StatelessWidget {
             maxY: 100,
             rangeAnnotations: buildPassingLine(passingResult),
             borderData: buildBorder(),
-            titlesData: buildTitlesData(textData),
-            barGroups: buildBars(context, data),
+            titlesData: buildTitlesData(widget.data),
+            barGroups: buildBars(context, widget.data),
           ),
         ),
       ),
     ]);
+  }
+
+  Future<List<AvgResultsBar>> getAVGs(List<Event> lastEvents) async {
+    double avg = 0;
+    List<AvgResultsBar> chartBars = [];
+    for (var event in lastEvents) {
+      avg = 0;
+      await http.findResultsByEvent(event.id).then((results) {
+        if (results.isEmpty) {
+          chartBars.add(AvgResultsBar(
+            avgResult: 0.1,
+            eventName: event.eventType.name,
+            eventDate: event.eventDate,
+          ));
+        } else {
+          double sum = results.fold(0, (previousValue, result) {
+            return previousValue + result.result + 0.0;
+          });
+
+          avg = sum / results.length + 0.0;
+          chartBars.add(AvgResultsBar(
+            avgResult: avg,
+            eventName: event.eventType.name,
+            eventDate: event.eventDate,
+          ));
+        }
+      });
+    }
+    return chartBars;
   }
 
   BarTouchData buildBarTouchData() {
@@ -69,7 +105,7 @@ class AvgResults extends StatelessWidget {
   RangeAnnotations buildPassingLine(int passingResult) {
     return RangeAnnotations(horizontalRangeAnnotations: [
       HorizontalRangeAnnotation(
-        y1: passingResult + 1,
+        y1: passingResult + 0,
         y2: passingResult - 1,
         color: const Color.fromRGBO(209, 172, 39, 1),
       ),
@@ -85,7 +121,7 @@ class AvgResults extends StatelessWidget {
     );
   }
 
-  FlTitlesData buildTitlesData(List<String> textData) {
+  FlTitlesData buildTitlesData(List<AvgResultsBar> data) {
     return FlTitlesData(
       rightTitles: SideTitles(showTitles: false),
       leftTitles: SideTitles(showTitles: false),
@@ -99,20 +135,25 @@ class AvgResults extends StatelessWidget {
           );
         },
         getTitles: (index) {
-          return '${textData[index.toInt()]}\n10.5.21';
+          if (data.isNotEmpty) {
+            return '${data[index.toInt()].eventName}\n${DateFormat('dd.MM.yy').format(data[index.toInt()].eventDate)}';
+          } else {
+            return '';
+          }
         },
       ),
     );
   }
 
-  List<BarChartGroupData> buildBars(BuildContext context, List<double> data) {
+  List<BarChartGroupData> buildBars(
+      BuildContext context, List<AvgResultsBar> data) {
     return List.generate(
       data.length,
       (index) => BarChartGroupData(
         x: index,
         barRods: [
           BarChartRodData(
-            y: data[index],
+            y: data[index].avgResult,
             width: 5,
             colors: [Theme.of(context).colorScheme.primary],
           ),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +10,7 @@ import 'user_provider.dart';
 
 class EventsProvider with ChangeNotifier {
   List<Event> _events = [];
+  int lastEventsAmount = 5;
 
   void initEvents(List<Event> events) {
     _events = events;
@@ -17,6 +19,10 @@ class EventsProvider with ChangeNotifier {
 
   List<Event> get events {
     return [..._events];
+  }
+
+  List<Event> get lastEvents {
+    return [..._events].sublist(0, min(_events.length, lastEventsAmount));
   }
 
   Future<void> fetchAndSetEvents() async {
@@ -46,7 +52,7 @@ class EventsProvider with ChangeNotifier {
           });
         });
       }
-      loadedEvents.sort((a, b) => a.eventDate.isAfter(b.eventDate) ? 1 : -1);
+      loadedEvents.sort((a, b) => a.eventDate.isAfter(b.eventDate) ? -1 : 1);
       _events = loadedEvents.toList();
       notifyListeners();
     });

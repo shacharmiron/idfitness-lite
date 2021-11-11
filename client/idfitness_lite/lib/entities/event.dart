@@ -3,7 +3,7 @@ import 'force.dart';
 import 'user.dart';
 
 class Event {
-  int? id;
+  int id;
   EventType eventType;
   Force force;
   DateTime insertionDate;
@@ -13,7 +13,7 @@ class Event {
   User? createdBy;
 
   Event({
-    this.id,
+    required this.id,
     required this.eventType,
     required this.force,
     required this.insertionDate,
