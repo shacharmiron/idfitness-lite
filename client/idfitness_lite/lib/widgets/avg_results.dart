@@ -20,17 +20,10 @@ class AvgResults extends StatelessWidget {
     ResultsProvider results = Provider.of<ResultsProvider>(context);
 
     for (var event in lastEvents) {
-      List<Result> eventResults = results.getResultsOfEvent(event.id);
-      int amount = eventResults.length;
-      int sum = eventResults.fold(0, (previousValue, result) {
-        return previousValue + result.result;
-      });
-      double avg = amount == 0 ? 0.1 : sum / amount;
-
       data.add(AvgResultsBar(
         eventDate: event.eventDate,
         eventName: event.eventType.name,
-        avgResult: avg,
+        avgResult: results.getResultsAvg(results.getResultsOfEvent(event.id)),
       ));
     }
 

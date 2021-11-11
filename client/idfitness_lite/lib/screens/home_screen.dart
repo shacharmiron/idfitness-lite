@@ -9,6 +9,7 @@ import '../widgets/leader_board.dart';
 import '../providers/events_provider.dart';
 import '../providers/user_provider.dart';
 import '../providers/results_provider.dart';
+import '../providers/soldiers_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
@@ -25,6 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
           .fetchAndSetResults();
       await Provider.of<EventsProvider>(context, listen: false)
           .fetchAndSetEvents();
+      await Provider.of<SoldiersProvider>(context, listen: false)
+          .fetchAndSetSoldiers();
     });
     super.initState();
   }

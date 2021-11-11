@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/soldiers_provider.dart';
+import '../providers/results_provider.dart';
+import '../entities/soldier.dart';
+import '../entities/leader_board_row.dart';
 
 class LeaderBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    const int leadersAmount = 3;
+    List<Soldier> soldiers = Provider.of<SoldiersProvider>(context).soldiers;
+    ResultsProvider results = Provider.of<ResultsProvider>(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -16,7 +26,7 @@ class LeaderBoard extends StatelessWidget {
         ),
         Container(
           margin: const EdgeInsets.all(20),
-          height: 150,
+          padding: const EdgeInsets.only(bottom: 15),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(25),
@@ -69,7 +79,7 @@ class LeaderBoard extends StatelessWidget {
                     Padding(padding: EdgeInsets.all(5)),
                     Padding(padding: EdgeInsets.all(5)),
                   ]),
-              ...buildTableRows(),
+              ...buildTableRows(soldiers, results, leadersAmount),
             ],
           ),
         ),
@@ -77,24 +87,47 @@ class LeaderBoard extends StatelessWidget {
     );
   }
 
-  List<TableRow> buildTableRows() {
-    List<TableRow> rows = [
-      TableRow(children: [
-        Column(children: [Text('.1')]),
-        Column(children: [Text('name name')]),
-        Column(children: [Text('avg')]),
-      ]),
-      TableRow(children: [
-        Column(children: [Text('.2')]),
-        Column(children: [Text('name name')]),
-        Column(children: [Text('avg')]),
-      ]),
-      TableRow(children: [
-        Column(children: [Text('.3')]),
-        Column(children: [Text('name name')]),
-        Column(children: [Text('avg')]),
-      ]),
-    ];
-    return rows;
+  List<TableRow> buildTableRows(
+    List<Soldier> soldiers,
+    ResultsProvider results,
+    int leadersAmount,
+  ) {
+    List<LeaderBoardRow> rows = [];
+    for (Soldier soldier in soldiers) {
+      rows.add(LeaderBoardRow(
+        soldier: soldier,
+        avg: results.getResultsAvg(results.getResultsOfSoldier(soldier.id)),
+      ));
+    }
+
+    rows.sort((a, b) => a.avg - b.avg >= 0 ? -1 : 1);
+    if (rows.length > leadersAmount) {
+      rows = rows.sublist(0, leadersAmount);
+    }
+
+    List<TableRow> TableRows = [];
+
+    const TextStyle tableRowTextStyle = TextStyle(
+        color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600);
+
+    for (LeaderBoardRow row in rows) {
+      TableRows.add(
+        TableRow(children: [
+          Column(children: [
+            Text('.${(TableRows.length + 1).toString()}',
+                style: tableRowTextStyle)
+          ]),
+          Column(children: [
+            Text('${row.soldier.lastName} ${row.soldier.firstName}',
+                style: tableRowTextStyle)
+          ]),
+          Column(children: [
+            Text(row.avg.round().toString(), style: tableRowTextStyle)
+          ]),
+        ]),
+      );
+    }
+
+    return TableRows;
   }
 }

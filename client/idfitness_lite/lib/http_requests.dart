@@ -178,12 +178,13 @@ Future<List<Soldier>> getAllSoldiers() async {
     var data = jsonDecode(res.body)['data'];
     for (var soldier in data) {
       await findForceById(soldier['force_id']).then((force) async {
-        await findUserById(soldier['created_by']).then((user) {
+        await findUserById(soldier['user_id']).then((user) {
           loadedSoldiers.add(Soldier(
             id: soldier['id'] as int,
             firstName: soldier['first_name'],
             lastName: soldier['last_name'],
-            dateOfBirth: DateTime.parse(soldier['date_of_birth']),
+            dateOfBirth:
+                DateFormat('dd.MM.yyyy').parse(soldier['date_of_birth']),
             user: user,
             force: force,
             weight: soldier['weight'] as int,
