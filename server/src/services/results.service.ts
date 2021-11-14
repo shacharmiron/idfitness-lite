@@ -23,6 +23,16 @@ class ResultService {
 
     return findResults;
   }
+
+  public async findResultsBySoldier(soldierId: number): Promise<Result[]> {
+    if (isEmpty(soldierId)) throw new HttpException(400, "You're not soldierId");
+
+    const resultRepository = getRepository(this.results);
+    const findResults: Result[] = await resultRepository.find({ where: { soldier_id: soldierId } });
+    if (!findResults) throw new HttpException(409, "You're not soldier");
+
+    return findResults;
+  }
 }
 
 export default ResultService;

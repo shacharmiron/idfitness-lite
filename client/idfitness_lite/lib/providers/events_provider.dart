@@ -12,11 +12,6 @@ class EventsProvider with ChangeNotifier {
   List<Event> _events = [];
   int lastEventsAmount = 5;
 
-  void initEvents(List<Event> events) {
-    _events = events;
-    notifyListeners();
-  }
-
   List<Event> get events {
     return [..._events];
   }
@@ -26,34 +21,8 @@ class EventsProvider with ChangeNotifier {
   }
 
   Future<void> fetchAndSetEvents() async {
-    List<Event> loadedEvents = [];
-    http.getAllEvents().then((res) async {
-      var data = jsonDecode(res.body)['data'];
-      if (data == null) {
-        return;
-      }
-      for (var event in data) {
-        await http.findForceById(event['force_id']).then((force) async {
-          await http
-              .findEventTypeById(event['event_type_id'])
-              .then((eventType) async {
-            await http.findUserById(event['created_by']).then((user) {
-              loadedEvents.add(Event(
-                createdBy: user,
-                force: force,
-                eventType: eventType,
-                eventDate: DateTime.parse(event['event_date']),
-                insertionDate: DateTime.parse(event['insertion_date']),
-                isDeleted: event['is_deleted'] as bool,
-                comment: event['comment'],
-                id: event['id'] as int,
-              ));
-            });
-          });
-        });
-      }
-      loadedEvents.sort((a, b) => a.eventDate.isAfter(b.eventDate) ? -1 : 1);
-      _events = loadedEvents.toList();
+    http.getAllEvents().then((events) {
+      _events = events.toList();
       notifyListeners();
     });
   }

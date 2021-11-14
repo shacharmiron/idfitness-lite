@@ -5,8 +5,11 @@ import 'package:provider/provider.dart';
 import '../entities/user.dart';
 import '../widgets/last_events.dart';
 import '../widgets/avg_results.dart';
+import '../widgets/leader_board.dart';
 import '../providers/events_provider.dart';
 import '../providers/user_provider.dart';
+import '../providers/results_provider.dart';
+import '../providers/soldiers_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
@@ -19,8 +22,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     Future.delayed(Duration.zero).then((_) async {
+      await Provider.of<ResultsProvider>(context, listen: false)
+          .fetchAndSetResults();
       await Provider.of<EventsProvider>(context, listen: false)
           .fetchAndSetEvents();
+      await Provider.of<SoldiersProvider>(context, listen: false)
+          .fetchAndSetSoldiers();
     });
     super.initState();
   }
@@ -72,6 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             LastEvents(),
             AvgResults(),
+            LeaderBoard(),
           ],
         ),
       ),
